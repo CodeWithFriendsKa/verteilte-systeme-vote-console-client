@@ -9,9 +9,13 @@ import de.dhbw.vote.view.ContentViewer;
 import de.dhbw.vote.common.CustomLogger;
 import de.dhbw.vote.model.UpDownVote;
 import de.dhbw.vote.model.Voter;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
+import org.apache.http.Header;
 
 /**
  *
@@ -19,6 +23,7 @@ import java.util.List;
  */
 public class CommandInterpreter {
     
+    private static final BufferedReader fromKeyboard = new BufferedReader(new InputStreamReader(System.in));
     private final  ContentViewer content;
     private static final CustomLogger logger = new CustomLogger(CommandInterpreter.class);
     private static final String URL_API = "http://localhost:8080/vote/api";
@@ -101,24 +106,53 @@ public class CommandInterpreter {
         content.showWaitForCommand();
     }
     
-    public void getAllVoter() throws UnirestException{
-        HttpResponse<Voter[]> response = Unirest.get(URL_VOTER).asObject(Voter[].class);
+    public void getAllVoter() throws UnirestException, IOException{
+        String base64 = askUsernameAndPassword();
+        HttpResponse<Voter[]> response = Unirest
+                .get(URL_VOTER)
+                .header("Authorization", base64)
+                .asObject(Voter[].class);
         List<Voter> voters = Arrays.asList(response.getBody());
         voters.forEach(v -> System.out.println(v.toString()));
     }
-    public void getAllUpDownVotes() throws UnirestException{
-        HttpResponse<UpDownVote[]> response = Unirest.get(URL_VOTES).asObject(UpDownVote[].class);
+    public void getAllUpDownVotes() throws UnirestException, IOException{
+        String base64 = askUsernameAndPassword();
+        HttpResponse<UpDownVote[]> response = Unirest
+                .get(URL_VOTES)
+                .header("Authorization", base64)                
+                .asObject(UpDownVote[].class);
         List<UpDownVote> votes = Arrays.asList(response.getBody());
         votes.forEach(v-> System.out.println(v.toString()));
     }
-    public void getVoterByUsername(String username) throws UnirestException{
-        HttpResponse<Voter> response = Unirest.get(URL_VOTER + username).asObject(Voter.class);
+    public void getVoterByUsername(String username) throws UnirestException, IOException{
+        String base64 = askUsernameAndPassword();
+        HttpResponse<Voter> response = Unirest
+                .get(URL_VOTER + username)
+                .header("Authorization", base64)
+                .asObject(Voter.class);
         Voter voter = response.getBody();
         System.out.println(voter.toString());    
     }
-    public void getUpDownVotesByUsername(String username) throws UnirestException{
-        HttpResponse<UpDownVote> response = Unirest.get(URL_VOTES + username).asObject(UpDownVote.class);
+    public void getUpDownVotesByUsername(String username) throws UnirestException, IOException{
+        String base64 = askUsernameAndPassword();
+        HttpResponse<UpDownVote> response = Unirest
+                .get(URL_VOTES + username)
+                .header("Authorization", base64)
+                .asObject(UpDownVote.class);
         UpDownVote upDownVote = response.getBody();
         System.out.println(upDownVote.toString());
+    }
+    
+    public String askUsernameAndPassword() throws IOException{
+        System.out.print("enter username : > ");
+        String username = fromKeyboard.readLine();
+        System.out.print("enter password : > ");
+        String password = fromKeyboard.readLine();
+        byte[] encodedBytes = Base64.getEncoder().encode((username + ":" + password).getBytes());
+        String base64 =  new String(encodedBytes);
+        String b = "Basic ";
+        b+= base64;
+        logger.debug(b);
+        return b;
     }
 }
