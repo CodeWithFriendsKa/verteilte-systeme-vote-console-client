@@ -1,0 +1,11 @@
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/controller/CommandInterpreter.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/model/UpDownVoteDeserializer.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/common/CustomLogger.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/view/ContentViewer.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/model/Sex.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/model/Password.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/model/UpDownVote.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/model/VoterDeserializer.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/model/Voter.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/model/Category.java
+/home/codekeks/NetBeansProjects/vote-client/src/main/java/de/dhbw/vote/ConsoleApplication.java
